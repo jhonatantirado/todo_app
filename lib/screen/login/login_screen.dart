@@ -6,9 +6,7 @@ import 'package:todo_app/model/user.dart';
 
 class LoginScreen extends StatefulWidget{
   @override
-  State<StatefulWidget> createState(){
-    return new LoginScreenState();
-  }
+  State<StatefulWidget> createState() => LoginScreenState();
 }
 
 class LoginScreenState extends State<LoginScreen>

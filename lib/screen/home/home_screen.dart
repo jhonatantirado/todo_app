@@ -4,9 +4,7 @@ import 'package:todo_app/screen/home/home_screen_presenter.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
-  State<StatefulWidget> createState(){
-    return new HomeScreenState();
-  }
+  State<StatefulWidget> createState()=> HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
