@@ -12,6 +12,18 @@ class DatabaseHelper{
 
   static Database _db;
 
+  final List<String> initScripts = [
+    '''
+    CREATE TABLE users(
+      id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      password TEXT NOT NULL
+    );
+    '''
+  ];
+
+  List<String> migrationScripts = [];
+
   Future<Database> get db async{
     if (_db != null)
       return _db;
@@ -23,13 +35,24 @@ class DatabaseHelper{
   initDb() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "main.db");
-    var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
+    int version = migrationScripts.length <= 0 ? 1 : migrationScripts.length + 1;
+    var theDb = await openDatabase(path, version: version, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return theDb;
   }
 
   void _onCreate(Database db, int version) async{
-    await db.execute("CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, password TEXT)");
+    initScripts.forEach((script) async => await db.execute(script));
+    // await db.execute("CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, password TEXT)");
     print("Created tables");
+  }
+
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async{
+    print('oldVersion: ' + oldVersion.toString());
+    print('newVersion: ' + newVersion.toString());
+    for (var i = oldVersion - 1; i< newVersion - 1; i++){
+      print('migrationScripts[i] => ' + i.toString());
+      await db.execute(migrationScripts[i]);
+    }
   }
 
   Future<int> saveUser(User user) async{
