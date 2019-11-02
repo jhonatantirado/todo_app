@@ -14,6 +14,7 @@ class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
   HomeScreenPresenter _presenter;
   String _homeText;
   Widget content = UserListPage();
+  var _currentIndex = 0;
 
   HomeScreenState(){
     _presenter = new HomeScreenPresenter(this);
@@ -55,9 +56,51 @@ class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
           ],
         ),
       ),
-      body:  content
+      body:  content,
+      bottomNavigationBar: _indexBottom()
     );
   }
+
+  Widget _indexBottom() => BottomNavigationBar(
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.graduationCap),
+            title: Text('Cursos'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.userTie),
+            title: Text('Docentes'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.userGraduate),
+            title: Text('Estudiantes'),
+          ),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            switch (_currentIndex) {
+              case 0:
+                content = UserListPage();
+                break;
+              case 1:
+                content = Container(
+                  alignment: Alignment.center,
+                  child: Text("Docentes"),
+                );
+                break;
+              case 2:
+                content = Container(
+                  alignment: Alignment.center,
+                  child: Text("Estudiantes"),
+                );
+                break;
+            }
+          });
+        },
+      );
 
   @override
   void onDisplayUserInfo(User user){
