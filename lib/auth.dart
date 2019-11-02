@@ -23,11 +23,7 @@ class AuthStateProvider{
   }
 
   void initState() async{
-    var isLoggedIn = await userRepository.isLoggedIn();
-    if (isLoggedIn)
-      notify(AuthState.LOGGED_IN);
-    else
-      notify(AuthState.LOGGED_OUT);
+    print("InitState AuthStateProvider");
   }
 
   void subscribe(AuthStateListener listener) {

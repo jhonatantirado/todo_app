@@ -23,7 +23,12 @@ class LoginScreenPresenter {
   }
 
   void processLoginSuccess(User user) async {
-      userRepository.insert(user);
-      _view.onLoginSuccess(user);
+      var loggedInUser = await userRepository.login(user);
+      if (loggedInUser != null) {
+        _view.onLoginSuccess(user);
+      }
+      else {
+        _view.onLoginError("Invalid credentials");
+      }
   }
 }

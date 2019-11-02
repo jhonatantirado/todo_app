@@ -72,8 +72,8 @@ implements LoginScreenContract, AuthStateListener
                 child: new TextFormField(
                   onSaved: (val) => _username = val,
                   validator: (val){
-                    return val.length < 10
-                      ? "Username must have at least 10 chars"
+                    return val.length < 5
+                      ? "Username must have at least 5 chars"
                       : null;
                   },
                   decoration: new InputDecoration(labelText: "Username"),

@@ -48,6 +48,7 @@ class SqfliteUserRepository implements UserRepository{
     return result;
   }
 
+  // TODO: this should get the current user
   Future<User> getFirstUser() async{
     final db = await databaseHelper.db;
     List<Map> list = await db.rawQuery("SELECT * FROM User");
@@ -59,10 +60,15 @@ class SqfliteUserRepository implements UserRepository{
     }
   }
 
-  Future<bool> isLoggedIn() async {
+  Future<User> login(User user) async{
     final db = await databaseHelper.db;
-    var res = await db.query("User");
-    return res.length > 0 ? true: false;
+    List<Map> result = await db.rawQuery("SELECT * FROM User where username=? and password=?",[user.username, user.password]);
+    if (result.isNotEmpty){
+      var element = result.elementAt(0);
+      return new User(element["username"],element["password"],element["email"]);
+    } else{
+      return null;
+    }
   }
 
 }

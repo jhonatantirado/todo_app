@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io' as io;
 import 'package:path/path.dart';
-import 'package:todo_app/model/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -62,6 +61,7 @@ class DatabaseHelper{
     initScripts.forEach((script) async => await db.execute(script));
     initScriptsCourse.forEach((script) async => await db.execute(script));
     print("Created tables");
+    await db.rawInsert('INSERT INTO User (username, password, email) VALUES("admin", "123456","admin@gmail.com")');
   }
 
   void _onUpgrade(Database db, int oldVersion, int newVersion) async{
