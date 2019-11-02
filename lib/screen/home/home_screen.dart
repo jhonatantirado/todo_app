@@ -4,21 +4,27 @@ import 'package:todo_app/screen/home/home_screen_presenter.dart';
 import 'package:todo_app/common/app_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todo_app/screen/user/user_list_page.dart';
+import 'package:todo_app/screen/course/course_list_page.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
   State<StatefulWidget> createState()=> HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
+class HomeScreenState extends State<HomeScreen> 
+implements HomeScreenContract
+
+{
   HomeScreenPresenter _presenter;
   String _homeText;
   Widget content = UserListPage();
   var _currentIndex = 0;
 
+
   HomeScreenState(){
     _presenter = new HomeScreenPresenter(this);
     _presenter.getUserInfo();
+
   }
 
   @override
@@ -51,7 +57,7 @@ class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
                 child: Icon(FontAwesomeIcons.solidBell,
                     size: AppConstants.iconSize, color: Colors.white),
               ),
-              onTap: () {},
+              onTap: onLogout,
             ),
           ],
         ),
@@ -67,11 +73,11 @@ class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.graduationCap),
-            title: Text('Cursos'),
+            title: Text('Usuarios'),
           ),
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.userTie),
-            title: Text('Docentes'),
+            title: Text('Cursos'),
           ),
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.userGraduate),
@@ -86,10 +92,7 @@ class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
                 content = UserListPage();
                 break;
               case 1:
-                content = Container(
-                  alignment: Alignment.center,
-                  child: Text("Docentes"),
-                );
+                content = CourseListPage();
                 break;
               case 2:
                 content = Container(
@@ -116,5 +119,8 @@ class HomeScreenState extends State<HomeScreen> implements HomeScreenContract{
     });
   }
 
+  void onLogout() async{
+    print("Notify logout");
+  }
 
 }

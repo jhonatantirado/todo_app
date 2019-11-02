@@ -1,5 +1,7 @@
 import 'package:todo_app/data/database_helper.dart';
 
+import 'infraestructure/Sqflite_UserRepository.dart';
+
 enum AuthState { LOGGED_IN, LOGGED_OUT}
 
 abstract class AuthStateListener{
@@ -8,6 +10,8 @@ abstract class AuthStateListener{
 
 class AuthStateProvider{
   static final AuthStateProvider _instance = new AuthStateProvider.internal();
+
+  SqfliteUserRepository userRepository = SqfliteUserRepository(DatabaseHelper.get);
 
   List<AuthStateListener> _subscribers;
 
@@ -19,8 +23,7 @@ class AuthStateProvider{
   }
 
   void initState() async{
-    var db = new DatabaseHelper();
-    var isLoggedIn = await db.isLoggedIn();
+    var isLoggedIn = await userRepository.isLoggedIn();
     if (isLoggedIn)
       notify(AuthState.LOGGED_IN);
     else

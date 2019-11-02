@@ -36,7 +36,7 @@ class SqfliteUserRepository implements UserRepository{
   @override
   Future<List<User>> getList() async{
     final db = await databaseHelper.db;
-    var result = await db.rawQuery("SELECT * FROM User order by username ASC");
+    var result = await db.rawQuery("SELECT * FROM User order by id ASC");
     List<User> users = assembler.fromList(result);
     return users;
   }
@@ -46,6 +46,23 @@ class SqfliteUserRepository implements UserRepository{
     var result = Sqflite.firstIntValue(
       await db.rawQuery("SELECT count(*) FROM User order"));
     return result;
+  }
+
+  Future<User> getFirstUser() async{
+    final db = await databaseHelper.db;
+    List<Map> list = await db.rawQuery("SELECT * FROM User");
+    if (list.isNotEmpty){
+      var element = list.elementAt(0);
+      return new User(element["username"],element["password"],element["email"]);
+    } else{
+      return null;
+    }
+  }
+
+  Future<bool> isLoggedIn() async {
+    final db = await databaseHelper.db;
+    var res = await db.query("User");
+    return res.length > 0 ? true: false;
   }
 
 }

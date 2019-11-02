@@ -24,7 +24,22 @@ class DatabaseHelper{
     '''
   ];
 
+  final List<String> initScriptsCourse = [
+    '''
+    CREATE TABLE courses(
+      id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      description TEXT NULL,
+      semester INTEGER NOT NULL,
+      credits INTEGER NOT NULL,
+      research INTEGER NOT NULL DEFAULT 0
+    );
+    '''
+  ];
+
   List<String> migrationScripts = [];
+
+  List<String> downgradeScripts = [];
 
   Future<Database> get db async{
     if (_db != null)
@@ -38,13 +53,14 @@ class DatabaseHelper{
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "main.db");
     int version = migrationScripts.length <= 0 ? 1 : migrationScripts.length + 1;
-    var theDb = await openDatabase(path, version: version, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    var theDb = await openDatabase(path, version: version, onCreate: _onCreate, 
+    onUpgrade: _onUpgrade, onDowngrade: _onDowngrade);
     return theDb;
   }
 
   void _onCreate(Database db, int version) async{
     initScripts.forEach((script) async => await db.execute(script));
-    // await db.execute("CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, password TEXT)");
+    initScriptsCourse.forEach((script) async => await db.execute(script));
     print("Created tables");
   }
 
@@ -57,33 +73,13 @@ class DatabaseHelper{
     }
   }
 
-  Future<int> saveUser(User user) async{
-    var dbClient = await db;
-    int res = await dbClient.insert("User", user.toMap());
-    return res;
-  }
-
-  Future<User> getFirstUser() async{
-    var dbClient = await db;
-    List<Map> list = await dbClient.rawQuery("SELECT * FROM User");
-    if (list.isNotEmpty){
-      var element = list.elementAt(0);
-      return new User(element["username"],element["password"],element["email"]);
-    } else{
-      return null;
+  void _onDowngrade(Database db, int currentVersion, int previousVersion) async{
+    print('currentVersion: ' + currentVersion.toString());
+    print('previousVersion: ' + previousVersion.toString());
+    for (var i = currentVersion - 1; i> previousVersion - 1; i--){
+      print('downgradeScripts[i] => ' + i.toString());
+      await db.execute(downgradeScripts[i]);
     }
-  }
-
-  Future<int> deleteUsers() async {
-    var dbClient = await db;
-    int res = await dbClient.delete("User");
-    return res;
-  }
-
-  Future<bool> isLoggedIn() async {
-    var dbClient = await db;
-    var res = await dbClient.query("User");
-    return res.length > 0 ? true: false;
   }
 
 }

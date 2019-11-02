@@ -1,3 +1,4 @@
+import 'package:todo_app/infraestructure/Sqflite_UserRepository.dart';
 import 'package:todo_app/model/user.dart';
 import 'package:todo_app/data/database_helper.dart';
 import 'package:todo_app/data/rest_ds.dart';
@@ -12,6 +13,9 @@ class LoginScreenPresenter {
   RestDatasource api = new RestDatasource();
   LoginScreenPresenter(this._view);
 
+  SqfliteUserRepository userRepository =
+    SqfliteUserRepository(DatabaseHelper.get);
+
   doLogin(String username, String password, String email) async {
     api.login(username, password, email).then((User user) {
       processLoginSuccess(user);
@@ -19,8 +23,7 @@ class LoginScreenPresenter {
   }
 
   void processLoginSuccess(User user) async {
-      var db = new DatabaseHelper();
-      await db.saveUser(user);
+      userRepository.insert(user);
       _view.onLoginSuccess(user);
   }
 }
