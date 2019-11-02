@@ -6,10 +6,11 @@ class UserAssembler implements Assembler<User>{
   final columnId = 'id';
   final columnName = 'username';
   final columnPassword = 'password';
+  final columnEmail = 'email';
 
   @override
   User fromMap(Map<String, dynamic > query) {
-    User user = User(query[columnName],query[columnPassword]);
+    User user = User(query[columnName],query[columnPassword],query[columnEmail]);
     return user;
   }
 
@@ -17,12 +18,13 @@ class UserAssembler implements Assembler<User>{
   Map<String, dynamic> toMap(User user) {
     return <String, dynamic>{
       columnName: user.username,
-      columnPassword: user.password
+      columnPassword: user.password,
+      columnEmail: user.email
     };
   }
 
   User fromDbRow(dynamic row){
-    return User.withId(row[columnId],row[columnName],row[columnPassword]);
+    return User.withId(row[columnId],row[columnName],row[columnPassword],row[columnEmail]);
   }
 
   @override

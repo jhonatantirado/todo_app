@@ -8,16 +8,18 @@ import 'package:path_provider/path_provider.dart';
 class DatabaseHelper{
   static final DatabaseHelper _instance = new DatabaseHelper.internal();
   factory DatabaseHelper() => _instance;
+  static DatabaseHelper get = _instance;
   DatabaseHelper.internal();
 
   static Database _db;
 
   final List<String> initScripts = [
     '''
-    CREATE TABLE users(
+    CREATE TABLE User(
       id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      email TEXT NOT NULL
     );
     '''
   ];
@@ -66,7 +68,7 @@ class DatabaseHelper{
     List<Map> list = await dbClient.rawQuery("SELECT * FROM User");
     if (list.isNotEmpty){
       var element = list.elementAt(0);
-      return new User(element["username"],element["password"]);
+      return new User(element["username"],element["password"],element["email"]);
     } else{
       return null;
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/routes.dart';
+import 'package:todo_app/common/app_constants.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,9 +9,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My Login App',
+      title: AppConstants.appTitle,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        fontFamily: "Roboto",
+        primarySwatch: AppConstants.primaryColor,
       ),
       routes: routes,
     );

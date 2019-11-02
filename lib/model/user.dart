@@ -1,25 +1,24 @@
 class User{
-  int _id;
-  String _username;
-  String _password;
-  User(this._username,this._password);
-  User.withId(this._id,this._username,this._password);
+  int id;
+  String username;
+  String password;
+  String email;
+  User(this.username,this.password,this.email);
+  User.withId(this.id,this.username,this.password,this.email);
 
   User.map(dynamic obj){
-    this._id = obj["id"];
-    this._username = obj["username"];
-    this._password = obj["password"];
+    this.id = obj["id"];
+    this.username = obj["username"];
+    this.password = obj["password"];
+    this.email =  obj["email"];
   }
-
-  int get id => _id;
-  String get username => _username;
-  String get password => _password;
 
   Map<String, dynamic> toMap(){
     var map = new Map<String, dynamic> ();
-    map["id"] = _id;
-    map["username"] = _username;
-    map["password"] = _password;
+    map["id"] = id;
+    map["username"] = username;
+    map["password"] = password;
+    map["email"] = email;
 
     return map;
   }

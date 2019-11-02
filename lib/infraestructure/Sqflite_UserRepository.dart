@@ -6,6 +6,7 @@ import 'package:todo_app/infraestructure/UserRepository.dart';
 
 class SqfliteUserRepository implements UserRepository{
   final assembler = UserAssembler();
+
   DatabaseHelper databaseHelper;
   SqfliteUserRepository(this.databaseHelper);
 

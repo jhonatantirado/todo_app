@@ -16,7 +16,7 @@ implements LoginScreenContract, AuthStateListener
   bool _isLoading = false;
   final formKey = new GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  String _username, _password;
+  String _username, _password,_email;
 
   LoginScreenPresenter _presenter;
 
@@ -31,7 +31,7 @@ implements LoginScreenContract, AuthStateListener
     if (form.validate()){
       setState(()=> _isLoading=true);
       form.save();
-      _presenter.doLogin(_username,_password);
+      _presenter.doLogin(_username,_password,_email);
     }
   }
 
