@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:todo_app/auth.dart';
+import 'package:todo_app/common/app_constants.dart';
 import 'package:todo_app/screen/login/login_screen_presenter.dart';
 import 'package:todo_app/model/user.dart';
 
@@ -43,6 +44,8 @@ implements LoginScreenContract, AuthStateListener
   void onAuthStateChanged(AuthState state) {
     if (state == AuthState.LOGGED_IN)
       Navigator.of(_ctx).pushReplacementNamed("/home");
+    if (state == AuthState.LOGGED_OUT)
+      print("Should logout");
   }
 
   @override
@@ -57,7 +60,7 @@ implements LoginScreenContract, AuthStateListener
     var loginForm = new Column(
       children: <Widget>[
         new Text(
-          "Login App",
+          AppConstants.appTitle,
           textScaleFactor: 2.0,
         ),
         new Form(
@@ -79,6 +82,7 @@ implements LoginScreenContract, AuthStateListener
               new Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: new TextFormField(
+                  obscureText: true,
                   onSaved: (val) => _password = val,
                   decoration: new InputDecoration(labelText: "Password"),
                 ),

@@ -5,6 +5,7 @@ import 'package:todo_app/common/app_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todo_app/screen/user/user_list_page.dart';
 import 'package:todo_app/screen/course/course_list_page.dart';
+import 'package:todo_app/auth.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -121,6 +122,8 @@ implements HomeScreenContract
 
   void onLogout() async{
     print("Notify logout");
+    var authStateProvider = new AuthStateProvider();
+    authStateProvider.notify(AuthState.LOGGED_OUT);
   }
 
 }
